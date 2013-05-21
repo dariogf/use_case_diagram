@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'use_case'
+
+def help
+	puts "Usage: $0 description_file"
+end
+
+
+input_file=ARGV.shift
+
+if input_file.nil? || !File.exists?(input_file)
+	puts "Need input file"
+	help
+	exit
+end
+
+
+cont=File.read(input_file)
+
+parse_result=Parser.parse(cont)
+
+# puts parse_result.obj.inspect
+
+if !parse_result.nil?
+	puts parse_result.obj.to_dot
+else
+  raise "No dot file produced"
+end

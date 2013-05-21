@@ -1,0 +1,177 @@
+grammar UCase
+
+	rule diagram
+	 (actor / node / uses / incl / extd / commentline / whiteline / newline)*
+		{
+			def obj                                
+				d=Diagram.new
+				elements.map{|e| e.obj}.compact.flatten.each do |e|
+					if e.is_a?(Actor) 
+				  	d.actors.add(e)
+				 	elsif e.is_a?(Node)
+						d.nodes.add(e)
+				 	elsif e.is_a?(Relation)
+							if e.type==:uses
+								d.uses(e.from_u,e.to_u)
+							elsif e.type==:includes
+								d.includes(e.from_u,e.to_u)
+							elsif e.type==:extended
+									d.extends(e.from_u,e.to_u)
+							end
+					else
+						 raise "Unknown element in parse tree"
+					end
+				end
+				
+				return d
+			end
+		}
+	end
+
+	rule actor
+		space? 'actor' space ident:identifier newline
+		{
+			def obj
+			 Actor.new(ident.obj)
+			end
+		}
+	end
+	
+	rule node
+		space? 'node' space ident:identifier desc:node_description? newline
+		{
+			def obj
+			 n=Node.new(ident.obj)
+			 if !desc.nil? && desc.respond_to?(:obj)
+			 	n.description=desc.obj
+			 end     
+			
+			 return n
+			end
+		}
+	end
+	
+	rule node_description
+		space desc:quotedstring
+		{
+			def obj
+			   eval(desc.text_value)
+			end
+		}
+	end
+	
+	rule uses
+		space? id1:identifier space 'uses' space id2:identifier id3:id_list* newline
+		{
+			def obj
+			 r=[]
+			 r << Relation.new(:uses,id1.obj,id2.obj)
+			
+			 id3.elements.each do |rel|
+				r << Relation.new(:uses,id1.obj,rel.obj)
+			 end
+			 return r
+			end
+		}
+	end
+	
+	rule incl
+		space? id1:identifier space 'includes' space id2:identifier id3:id_list* newline
+		{
+			def obj
+			 r=[]
+			 r << Relation.new(:includes,id1.obj,id2.obj)
+			
+			 id3.elements.each do |rel|
+				r << Relation.new(:includes,id1.obj,rel.obj)
+			 end
+			 return r
+			end
+		}
+	end
+
+	rule extd
+		space? id1:identifier space 'extended' space id2:identifier id3:id_list* newline
+		{
+			def obj
+			 r=[]
+			 r << Relation.new(:extended,id1.obj,id2.obj)
+			
+			 id3.elements.each do |rel|
+				r << Relation.new(:extended,id1.obj,rel.obj)
+			 end
+			 return r
+			end
+		}
+	end
+	
+	
+	rule id_list
+		space? ',' space? id1:(identifier)
+		{
+			def obj
+			 id1.obj
+			end
+		}
+	end
+	
+	
+  # ':' ident:[a-zA-Z0-9_]+
+	rule identifier
+	  ':' ident:([^\s\n\,\;\:\-]+)
+		{
+			def obj
+				ident.text_value.to_sym
+			end
+		}
+	end
+	
+	rule commentline
+	   space? '#' (!"\n" .)+ newline
+		 {
+				def obj
+					nil
+				end
+
+		 }
+	end
+
+	
+	rule quotedstring
+	  '"' ('\"' / !'"' .)* '"'
+		{
+			def obj
+				nil
+			end
+		
+		}
+	end
+
+	rule space
+	  [ \t]+
+	end
+
+	rule whiteline
+		space newline
+		{
+			def obj
+				nil
+			end
+		}
+	end
+	
+	rule newline
+	  [\n]
+		{
+			def obj
+				nil
+			end
+		}
+  end
+
+	rule emptyline
+		''
+	end
+
+
+end
