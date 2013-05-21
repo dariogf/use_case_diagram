@@ -1,5 +1,5 @@
 require 'treetop'
-require 'use_case'
+require 'use_case_diagram'
 require 'support_nodes'
 
 # Find out what our base path is
@@ -12,7 +12,7 @@ class Parser
   
   base_path = File.expand_path(File.dirname(__FILE__))
                                                       
-  Treetop.load(File.join(base_path, 'use_cases'))
+  Treetop.load(File.join(base_path, 'use_case_diagram'))
 
   # puts "- Grammar loaded"
   @@parser = UCaseParser.new

@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'use_case/version'
+require 'use_case_diagram/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "use_case"
-  spec.version       = UseCase::VERSION
+  spec.name          = "use_case_diagram"
+  spec.version       = UseCaseDiagram::VERSION
   spec.authors       = ["Dario Guerrero"]
   spec.email         = ["dariogf@gmail.com"]
   spec.description   = %q{A gem to generate user cases in UML using dot}
@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
-  spec.require_paths = ["lib","lib/use_case"]
+  spec.require_paths = ["lib","lib/use_case_diagram"]
   
   spec.add_runtime_dependency(%q<treetop>, ["= 1.4.12"])
   

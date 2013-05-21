@@ -1,4 +1,4 @@
-actor_path=File.join(File.dirname(File.dirname(__FILE__)),'use_case','Actor.png')
+actor_path=File.join(File.dirname(File.dirname(__FILE__)),'use_case_diagram','Actor.png')
 
 
 ACTOR_TPL =<<END                                                           

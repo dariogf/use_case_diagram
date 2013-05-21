@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'use_case'
+require 'use_case_diagram'
 
 def help
 	puts "Usage: $0 description_file"
@@ -24,7 +24,7 @@ parse_result=Parser.parse(cont)
 
 
 if !parse_result.nil?
-	puts parse_result.obj.to_dot.gsub('Actor.png',actor_path)
+	puts parse_result.obj.to_dot
 else
   raise "No dot file produced"
 end

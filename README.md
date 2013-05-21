@@ -1,14 +1,14 @@
-# UseCase
+# UseCaseDiagram
 
 This gem can be used to generate use case diagrams in dot format by using a simpler syntaxis.
 
 ## Installation
 
-gem install use_case 
+gem install use_case_diagram 
 
 Or you may add this line to your application's Gemfile:
 
-    gem 'use_case'
+    gem 'use_case_diagram'
 
 And then execute:
 
@@ -16,11 +16,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install use_case
+    $ gem install use_case_diagram
 
 ## Usage
 
-Create a text file with the use_case description (ej1.txt):
+Create a text file with the use_case_diagram description (ej1.txt):
 
 actor :user
 actor :admin
@@ -42,7 +42,7 @@ node :askpassword "Ask password"
 
 Then you can parse it to create the dot file:
 
-use_case ej1.txt > ej1.dot
+use_case_diagram ej1.txt > ej1.dot
 
 and call dot to create a pdf or png:
 
@@ -53,7 +53,7 @@ Obviously, you need dot installed to make this conversion.
 
 You can also use it with pipes:
 
-use_case ej1.txt | dot -Tpdf -o ej1.pdf ej1.dot
+use_case_diagram ej1.txt | dot -Tpdf -o ej1.pdf ej1.dot
 
 
 ## Contributing
