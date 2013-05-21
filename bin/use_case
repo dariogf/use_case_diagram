@@ -22,8 +22,9 @@ parse_result=Parser.parse(cont)
 
 # puts parse_result.obj.inspect
 
+
 if !parse_result.nil?
-	puts parse_result.obj.to_dot
+	puts parse_result.obj.to_dot.gsub('Actor.png',actor_path)
 else
   raise "No dot file produced"
 end

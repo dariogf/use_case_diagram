@@ -1,25 +1,33 @@
+actor_path=File.join(File.dirname(File.dirname(__FILE__)),'use_case','Actor.png')
+
+
 ACTOR_TPL =<<END                                                           
 
-/*subgraph clus#NAME# {label="#NAME#";  labelloc="b"; peripheries=0; #NAME#};*/
-#NAME# [shapefile="Actor.png", peripheries=0, style=solid, fixedsize=true, height=1.1, labeldistance=100, labelloc="b"];
+#NAME# [shapefile="#{actor_path}", peripheries=0, style=solid, fixedsize=true, height=1.1, labeldistance=100, labelloc="b" #LABEL#];
 
 END
 
 class Actor
   
-  attr_accessor :name
+  attr_accessor :name, :description
   
   #-----------------------------------------
   # 
   #-----------------------------------------
   def initialize(name)
     @name=name.to_s
+    @description=nil
+    
   end  
   
   def to_dot
        res=ACTOR_TPL
        res=res.gsub('#NAME#',@name)
-  
+       lab=''
+       if !@description.nil?
+         lab=' , label="'+@description.to_s+'"'
+       end
+       res=res.gsub('#LABEL#',lab)
        return res
     
   end

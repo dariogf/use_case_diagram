@@ -29,16 +29,20 @@ grammar UCase
 	end
 
 	rule actor
-		space? 'actor' space ident:identifier newline
+		space? 'actor' space ident:identifier desc:node_description? space? newline
 		{
 			def obj
-			 Actor.new(ident.obj)
+			 n=Actor.new(ident.obj)
+			 if !desc.nil? && desc.respond_to?(:obj)
+			 	n.description=desc.obj
+			 end     
+			 return n
 			end
 		}
 	end
 	
 	rule node
-		space? 'node' space ident:identifier desc:node_description? newline
+		space? 'node' space ident:identifier desc:node_description? space? newline
 		{
 			def obj
 			 n=Node.new(ident.obj)
@@ -61,7 +65,7 @@ grammar UCase
 	end
 	
 	rule uses
-		space? id1:identifier space 'uses' space id2:identifier id3:id_list* newline
+		space? id1:identifier space 'uses' space id2:identifier id3:id_list* space? newline
 		{
 			def obj
 			 r=[]
@@ -76,7 +80,7 @@ grammar UCase
 	end
 	
 	rule incl
-		space? id1:identifier space 'includes' space id2:identifier id3:id_list* newline
+		space? id1:identifier space 'includes' space id2:identifier id3:id_list* space? newline
 		{
 			def obj
 			 r=[]
@@ -91,7 +95,7 @@ grammar UCase
 	end
 
 	rule extd
-		space? id1:identifier space 'extended' space id2:identifier id3:id_list* newline
+		space? id1:identifier space 'extended' space id2:identifier id3:id_list* space? newline
 		{
 			def obj
 			 r=[]
