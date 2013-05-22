@@ -30,3 +30,14 @@ end
 
 class Expression < Treetop::Runtime::SyntaxNode
 end
+
+class String
+  
+  def dquote
+     return "\""+self+"\""
+  end
+  def squote
+     return "'"+self+"'"
+  end
+  
+end

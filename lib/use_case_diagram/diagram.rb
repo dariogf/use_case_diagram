@@ -87,7 +87,7 @@ class Diagram
      res=''
      relations.each do |from_use,to_use|
        to_use.each do |to_u|
-        res += "#{from_use} -> #{to_u};\n"        
+        res += "#{from_use.to_s.dquote} -> #{to_u.to_s.dquote};\n"        
        end
      end
      
@@ -110,10 +110,29 @@ class Diagram
   def generalises_to_dot
     return relations_to_dot(@generalises)
   end
+   
+  def fill_nodes_from(hash)
+    hash.to_a.flatten.each do |node|
+      if (!@nodes.find(node) && !@actors.find(node))
+         @nodes.add(node)
+      end
+    end
+  end
+     
+  # fill nodes not defined by node a line
+  def fill_nodes
+    fill_nodes_from(@uses)
+    fill_nodes_from(@extends)
+    fill_nodes_from(@includes)
+    fill_nodes_from(@generalises)
+  end
 
   
   def to_dot
-    res=DIAG_TPL;
+    
+    fill_nodes
+    
+    res=DIAG_TPL
     
     res=res.gsub('#ACTORS#',@actors.to_dot)
     res=res.gsub('#NODES#',@nodes.to_dot)

@@ -1,10 +1,8 @@
 actor :user 
- actor :admin "Admin name"
+actor :admin "Admin name"
 
-node :login
-  node :logout
-node :other 
 node :askpassword "Ask password"
+node :login
 
 :user uses :login, :other
 
@@ -13,5 +11,5 @@ node :askpassword "Ask password"
 :login includes :askpassword, :askname
 
 :logout extended :extend1_logout, :extend2_logout
-:askname includes :askfirstname
+:askname includes :askfirstname?
 :askname extended :asksecondname

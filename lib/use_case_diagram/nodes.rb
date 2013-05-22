@@ -8,7 +8,10 @@ class Node
   #-----------------------------------------
   def initialize(name)
     @name=name.to_s
-    @description=nil
+    if !@name.nil?
+      @description=@name.gsub('_','\n')
+    end
+    
   end  
   
 end
@@ -45,6 +48,24 @@ class Nodes
       
   end
   
+  def find(name)
+    # puts "="*20
+    # puts "FIND #{name},#{name.class}, count:#{@nodes.count}:"
+    # res=nil
+    # @nodes.each do |n|
+    #    puts "- #{n.name}"
+    #    if n.name.to_sym==name
+    #     res=n
+    #     puts "*** FOUND #{res.name}."
+    #     
+    #     break
+    #   end
+    # end
+    #     
+    res=@nodes.find{|e| e.name.to_sym==name}
+    return res
+  end
+  
   def to_dot
      res=NODES_TPL
      @nodes.each do |node|
@@ -52,7 +73,7 @@ class Nodes
        if !node.description.nil?
          desc=' [label="'+node.description+'"]'
        end
-       res=res.gsub('#NODE#',node.name+"#{desc};\n#NODE#")
+       res=res.gsub('#NODE#',node.name.dquote+"#{desc};\n#NODE#")
      end
      
      res=res.gsub('#NODE#',"")

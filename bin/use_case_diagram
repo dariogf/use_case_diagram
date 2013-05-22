@@ -3,28 +3,72 @@
 require 'use_case_diagram'
 
 def help
-	puts "Usage: $0 description_file"
+	puts "Usage: $0 [-p] [-f] description_files"
+end
+
+                 
+to_screen=true
+if ARGV.index('-f')
+  ARGV.delete('-f')
+  to_screen=false
+end
+
+process_dot=false
+if ARGV.index('-p')
+  ARGV.delete('-p')
+  process_dot=true
+  
+  if !system('dot -V')
+    puts "ERROR. You need to install graphviz or dot to get pdfs"
+    exit
+  end
+  
+  to_screen=false
 end
 
 
-input_file=ARGV.shift
-
-if input_file.nil? || !File.exists?(input_file)
-	puts "Need input file"
+if ARGV.empty?
+	puts "Need at least one input file"
 	help
 	exit
 end
 
 
-cont=File.read(input_file)
+# the other arguments are files, or must be
+ARGV.each do |input_file|
+  if !File.exists?(input_file)
+    puts "Not an input file: #{input_file}"
+    next
+  end
+  
+  base_name=File.basename(input_file,File.extname(input_file))
+  
+  cont=File.read(input_file)
 
-parse_result=Parser.parse(cont)
+  parse_result=Parser.parse(cont)
 
-# puts parse_result.obj.inspect
+  # puts parse_result.obj.inspect
 
 
-if !parse_result.nil?
-	puts parse_result.obj.to_dot
-else
-  raise "No dot file produced"
+  if !parse_result.nil?
+    res=parse_result.to_dot
+    if to_screen
+  	  puts res
+  	else
+  	  f=File.open("#{base_name}.dot",'w')
+  	  f.puts res
+  	  f.close
+	  end
+  else
+    raise "No dot file produced"
+  end
+  
+  
+  if process_dot
+     system("dot -Tpdf -o \"#{base_name}.pdf\"  \"#{base_name}.dot\"")
+  end
+  
 end
+
+
+

@@ -37,7 +37,11 @@ class Parser
       raise Exception, "Parse error at offset: #{@@parser.index}"
     end
     
-    return tree
+    diag=tree.obj
+    
+    diag.fill_nodes
+    
+    return diag
   end
 
 end

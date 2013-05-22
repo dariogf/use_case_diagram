@@ -16,13 +16,15 @@ class Actor
   #-----------------------------------------
   def initialize(name)
     @name=name.to_s
-    @description=nil
+    if !@name.nil?
+      @description=@name.gsub('_',' ')
+    end
     
   end  
   
   def to_dot
        res=ACTOR_TPL
-       res=res.gsub('#NAME#',@name)
+       res=res.gsub('#NAME#',@name.dquote)
        lab=''
        if !@description.nil?
          lab=' , label="'+@description.to_s+'"'
@@ -59,7 +61,13 @@ class Actors
       end
       
       @actors<<a
+  end    
+  
+  def find(name)
+    res=@actors.find{|e| e.name.to_sym==name}
+    return res
   end
+  
   
   def to_dot
      res=ACTORS_TPL
