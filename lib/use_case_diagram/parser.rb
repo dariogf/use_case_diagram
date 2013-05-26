@@ -22,7 +22,7 @@ class Parser
   def self.parse(data)
     
     # Pass the data to the parser instance
-    tree = @@parser.parse(data)
+    tree = @@parser.parse(data+"\n")
     # puts "- Data parsed"
     
     # If tree is nil then there was an error during parsing
